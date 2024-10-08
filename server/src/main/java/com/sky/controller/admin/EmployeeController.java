@@ -104,6 +104,12 @@ public class EmployeeController {
         return Result.success(pageResultResult);
     }
 
+    /**
+     * 员工账号禁用
+     * @param status
+     * @param id
+     * @return
+     */
     @PostMapping("/status/{status}")
     @ApiOperation(value = "员工账号禁用")
     public Result forbidden(@PathVariable Integer status, Long id) {
@@ -112,4 +118,29 @@ public class EmployeeController {
         return Result.success();
     }
 
+    /**
+     * 根据员工id查询
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    @ApiOperation(value = "根据员工id查询")
+    public Result getById(@PathVariable Long id) {
+        log.info("根据员工id查询：{}",id);
+        Employee byId = employeeService.getById(id);
+        return Result.success(byId);
+    }
+
+    /**
+     * 更新员工信息
+     * @param employeedto
+     * @return
+     */
+    @PutMapping
+    @ApiOperation(value = "更新员工信息")
+    public Result update(@RequestBody EmployeeDTO employeedto) {
+        log.info("更新员工信息:{}",employeedto);
+        employeeService.update(employeedto);
+        return Result.success();
+    }
 }
