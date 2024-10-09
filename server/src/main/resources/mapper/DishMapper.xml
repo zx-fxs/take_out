@@ -7,4 +7,13 @@
         VALUES
         (#{name},#{categoryId},#{price},#{image},#{description},#{createTime},#{updateTime},#{createUser},#{updateUser},#{status})
     </insert>
+    <select id="pageQuery" resultType="com.sky.entity.Dish">
+        select * from dish
+        <where>
+            <if test="name != null and name!=''">
+                and name like concat('%',#{name},'%')
+            </if>
+        </where>
+        order by id desc
+    </select>
 </mapper>
