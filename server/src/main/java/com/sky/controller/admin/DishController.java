@@ -52,7 +52,6 @@ public class DishController {
         return Result.success(pageResultResult);
     }
 
-    //TODO 待定
     @GetMapping("/list")
     @ApiOperation(value = "根据分类id查询菜品")
     public Result QueryBycategoryId(Long categoryId) {
