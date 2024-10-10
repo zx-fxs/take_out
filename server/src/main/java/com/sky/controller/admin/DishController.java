@@ -4,6 +4,7 @@ package com.sky.controller.admin;
 import com.sky.dto.DishDTO;
 
 import com.sky.dto.DishPageQueryDTO;
+import com.sky.entity.Dish;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.DishService;
@@ -49,6 +50,15 @@ public class DishController {
         log.info("page dish:{}", dishPageQuerydto);
         PageResult pageResultResult = dishService.pageQuery(dishPageQuerydto);
         return Result.success(pageResultResult);
+    }
+
+    //TODO 待定
+    @GetMapping("/list")
+    @ApiOperation(value = "根据分类id查询菜品")
+    public Result QueryBycategoryId(Long categoryId) {
+        log.info("list dish:{}", categoryId);
+        List<Dish> dishes = dishService.queryBycategoryId(categoryId);
+        return Result.success(dishes);
     }
 
     /**

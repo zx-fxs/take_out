@@ -2,24 +2,19 @@ package com.sky.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.sky.annotation.AutoFill;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.StatusConstant;
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
-import com.sky.entity.SetmealDish;
-import com.sky.enumeration.OperationType;
 import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.DishFlavorsMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealdishMapper;
 import com.sky.result.PageResult;
-import com.sky.result.Result;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
-import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,7 +69,7 @@ public class DishServiceImpl implements DishService {
     @Override
     public PageResult pageQuery(DishPageQueryDTO dishPageQuerydto) {
         PageHelper.startPage(dishPageQuerydto.getPage(),dishPageQuerydto.getPageSize());
-        Page<Dish> dishes = dishMapper.pageQuery(dishPageQuerydto);
+        Page<DishVO> dishes = dishMapper.pageQuery(dishPageQuerydto);
         return new PageResult(dishes.getTotal(),dishes.getResult());
     }
 
@@ -129,7 +124,6 @@ public class DishServiceImpl implements DishService {
      * @param dishDTO
      */
     @Override
-    @AutoFill(OperationType.UPDATE)
     public void update(DishDTO dishDTO) {
         Dish dish = new Dish();
         BeanUtils.copyProperties(dishDTO, dish);
@@ -140,6 +134,12 @@ public class DishServiceImpl implements DishService {
         dishMapper.update(dish);
         dishFlavorsMapper.update(dishFlavor);
         log.info("update dish success");
+    }
+
+    @Override
+    public List<Dish> queryBycategoryId(Long categoryId) {
+        List<Dish> dish = dishMapper.queryBycategoryId(categoryId);
+        return dish;
     }
 
 

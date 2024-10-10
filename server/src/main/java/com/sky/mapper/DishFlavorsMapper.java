@@ -1,6 +1,8 @@
 package com.sky.mapper;
 
+import com.sky.annotation.AutoFill;
 import com.sky.entity.DishFlavor;
+import com.sky.enumeration.OperationType;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -12,6 +14,7 @@ public interface DishFlavorsMapper {
      * 新增口味
      * @param dishFlavors
      */
+    @AutoFill(OperationType.INSERT)
     void insert(List<DishFlavor> dishFlavors);
 
     /**
@@ -32,5 +35,6 @@ public interface DishFlavorsMapper {
      * 修改菜品
      * @param dishFlavor
      */
+    @AutoFill(OperationType.UPDATE)
     void update(DishFlavor dishFlavor);
 }
