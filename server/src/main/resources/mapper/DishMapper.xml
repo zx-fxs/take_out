@@ -7,6 +7,12 @@
         VALUES
         (#{name},#{categoryId},#{price},#{image},#{description},#{createTime},#{updateTime},#{createUser},#{updateUser},#{status})
     </insert>
+    <delete id="delete">
+        delete from dish where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
     <select id="pageQuery" resultType="com.sky.entity.Dish">
         select * from dish
         <where>
@@ -15,5 +21,14 @@
             </if>
         </where>
         order by id desc
+    </select>
+    <select id="getByIds" resultType="com.sky.entity.Dish">
+        select * from dish
+        <where>
+            id in
+            <foreach collection="ids" item="id" separator="," open="(" close=")">
+                #{id}
+            </foreach>
+        </where>
     </select>
 </mapper>

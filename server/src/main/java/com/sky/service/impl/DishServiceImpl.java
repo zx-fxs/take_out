@@ -2,14 +2,20 @@ package com.sky.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sky.constant.MessageConstant;
+import com.sky.constant.StatusConstant;
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
+import com.sky.entity.SetmealDish;
+import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.DishFlavorsMapper;
 import com.sky.mapper.DishMapper;
+import com.sky.mapper.SetmealdishMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -27,6 +34,9 @@ public class DishServiceImpl implements DishService {
 
     @Autowired
     private DishFlavorsMapper dishFlavorsMapper;
+
+    @Autowired
+    private SetmealdishMapper setmealdishMapper;
 
     /**
      * 新增菜品
@@ -61,5 +71,27 @@ public class DishServiceImpl implements DishService {
         PageHelper.startPage(dishPageQuerydto.getPage(),dishPageQuerydto.getPageSize());
         Page<Dish> dishes = dishMapper.pageQuery(dishPageQuerydto);
         return new PageResult(dishes.getTotal(),dishes.getResult());
+    }
+
+    @Transactional
+    @Override
+    public void delete(List<Long> ids) {
+        List<Dish> byIds = dishMapper.getByIds(ids);
+        if (byIds != null) {
+            for(Dish dish : byIds) {
+                if(Objects.equals(dish.getStatus(), StatusConstant.ENABLE)){
+                    throw new DeletionNotAllowedException(MessageConstant.DISH_ON_SALE);
+                }
+            }
+        }
+        List<Long> SetmealbyIds = setmealdishMapper.getByIds(ids);
+        if(SetmealbyIds != null && !SetmealbyIds.isEmpty()) {
+            throw new DeletionNotAllowedException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
+        }
+        dishMapper.delete(ids);
+        log.info("delete dish success");
+
+        dishFlavorsMapper.delete(ids);
+        log.info("delete dishFlavor success");
     }
 }
