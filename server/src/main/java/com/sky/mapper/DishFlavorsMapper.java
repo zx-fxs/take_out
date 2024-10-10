@@ -27,4 +27,10 @@ public interface DishFlavorsMapper {
      * @return
      */
     List<DishFlavor> getByDishId(Long id);
+
+    /**
+     * 修改菜品
+     * @param dishFlavor
+     */
+    void update(DishFlavor dishFlavor);
 }

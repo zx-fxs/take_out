@@ -32,10 +32,10 @@ public class DishController {
      */
     @PostMapping
     @ApiOperation(value = "新增菜品")
-    public void insert(@RequestBody DishDTO dishdto) {
+    public Result insert(@RequestBody DishDTO dishdto) {
         log.info("insert dish:{}", dishdto);
-        //TODO 请求出错了：Cannot set properties of undefined (setting 'type')
         dishService.insert(dishdto);
+        return Result.success();
     }
 
     /**
@@ -57,10 +57,10 @@ public class DishController {
      */
     @DeleteMapping
     @ApiOperation(value = "删除菜品")
-    public void delete(@RequestParam List<Long> ids){
+    public Result delete(@RequestParam List<Long> ids){
         log.info("delete dish:{}", ids);
         dishService.delete(ids);
-
+        return Result.success();
     }
 
     /**
@@ -74,6 +74,18 @@ public class DishController {
         log.info("query dish:{}", id);
         DishVO dishVO = dishService.queryById(id);
         return Result.success(dishVO);
+    }
+
+    /**
+     * 修改菜品
+     * @param dishDTO
+     */
+    @PutMapping
+    @ApiOperation(value = "修改菜品")
+    public Result update(@RequestBody DishDTO dishDTO) {
+        log.info("update dish:{}", dishDTO);
+        dishService.update(dishDTO);
+        return Result.success();
     }
 }
 

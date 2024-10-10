@@ -2,6 +2,7 @@ package com.sky.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sky.annotation.AutoFill;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.StatusConstant;
 import com.sky.dto.DishDTO;
@@ -9,6 +10,7 @@ import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
 import com.sky.entity.SetmealDish;
+import com.sky.enumeration.OperationType;
 import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.DishFlavorsMapper;
 import com.sky.mapper.DishMapper;
@@ -120,6 +122,24 @@ public class DishServiceImpl implements DishService {
         BeanUtils.copyProperties(dishFlavorbyId, dishVO);
 
         return dishVO;
+    }
+
+    /**
+     * 修改菜品
+     * @param dishDTO
+     */
+    @Override
+    @AutoFill(OperationType.UPDATE)
+    public void update(DishDTO dishDTO) {
+        Dish dish = new Dish();
+        BeanUtils.copyProperties(dishDTO, dish);
+
+        DishFlavor dishFlavor = new DishFlavor();
+        BeanUtils.copyProperties(dishDTO, dishFlavor);
+
+        dishMapper.update(dish);
+        dishFlavorsMapper.update(dishFlavor);
+        log.info("update dish success");
     }
 
 
