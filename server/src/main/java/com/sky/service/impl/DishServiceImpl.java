@@ -14,7 +14,9 @@ import com.sky.mapper.DishFlavorsMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealdishMapper;
 import com.sky.result.PageResult;
+import com.sky.result.Result;
 import com.sky.service.DishService;
+import com.sky.vo.DishVO;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -22,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -73,6 +76,10 @@ public class DishServiceImpl implements DishService {
         return new PageResult(dishes.getTotal(),dishes.getResult());
     }
 
+    /**
+     * 删除菜品
+     * @param ids
+     */
     @Transactional
     @Override
     public void delete(List<Long> ids) {
@@ -94,4 +101,26 @@ public class DishServiceImpl implements DishService {
         dishFlavorsMapper.delete(ids);
         log.info("delete dishFlavor success");
     }
+
+    /**
+     * 根据id查询菜品、口味
+     * @param id
+     * @return
+     */
+    @Override
+    public DishVO queryById(Long id) {
+        List<Dish> dishbyId = dishMapper.getByIds(Collections.singletonList(id));
+        Dish dish = dishbyId.get(0);
+
+        List<DishFlavor> dishFlavorbyId = dishFlavorsMapper.getByDishId(id);
+
+        DishVO dishVO = new DishVO();
+
+        BeanUtils.copyProperties(dish, dishVO);
+        BeanUtils.copyProperties(dishFlavorbyId, dishVO);
+
+        return dishVO;
+    }
+
+
 }

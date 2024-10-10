@@ -35,7 +35,15 @@ public interface DishMapper {
      */
     Page<Dish> pageQuery(DishPageQueryDTO dishPageQuerydto);
 
+    /**
+     * 根据id查询菜品
+     * @param ids
+     */
     List<Dish> getByIds(List<Long> ids);
 
+    /**
+     * 删除菜品
+     * @param ids
+     */
     void delete(List<Long> ids);
 }
