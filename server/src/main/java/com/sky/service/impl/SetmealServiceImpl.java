@@ -68,6 +68,11 @@ public class SetmealServiceImpl implements SetmealService {
         log.info("Update setmeal success");
     }
 
+    /**
+     * 根据id查询套餐
+     * @param id
+     * @return
+     */
     @Override
     public SetmealVO queryById(Long id) {
         Setmeal setmeal = setmealMapper.queryById(id);

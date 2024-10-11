@@ -15,5 +15,10 @@ public interface SetmealdishMapper {
      */
     List<Long> getByIds(List<Long> ids);
 
+    /**
+     * 根据id查询套餐关联菜品
+     * @param id
+     * @return
+     */
     List<SetmealDish> queryById(Long id);
 }
