@@ -11,4 +11,7 @@
             </foreach>
         </where>
     </select>
+    <select id="queryById" resultType="com.sky.entity.SetmealDish">
+        select * from setmeal_dish where id =#{id}
+    </select>
 </mapper>
