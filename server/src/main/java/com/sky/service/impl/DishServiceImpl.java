@@ -138,12 +138,21 @@ public class DishServiceImpl implements DishService {
         log.info("update dish success");
     }
 
+    /**
+     * 根据分类id查询
+     * @param categoryId
+     * @return
+     */
     @Override
     public List<Dish> queryBycategoryId(Long categoryId) {
         List<Dish> dish = dishMapper.queryBycategoryId(categoryId);
         return dish;
     }
 
+    /**
+     * 起售停售
+     * @param dishDTO
+     */
     @Override
     public void saleOrnot(DishDTO dishDTO) {
         List<Setmeal> setmeals = setmealdishMapper.saleOrnotQuery(dishDTO.getId());

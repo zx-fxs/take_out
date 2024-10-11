@@ -42,7 +42,16 @@ public interface DishService {
      */
     void update(DishDTO dishDTO);
 
+    /**
+     * 根据分类id查询
+     * @param categoryId
+     * @return
+     */
     List<Dish> queryBycategoryId(Long categoryId);
 
+    /**
+     * 起售停售
+     * @param dishDTO
+     */
     void saleOrnot(DishDTO dishDTO);
 }
