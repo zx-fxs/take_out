@@ -8,6 +8,8 @@ import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
+import com.sky.entity.Setmeal;
+import com.sky.exception.BaseException;
 import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.DishFlavorsMapper;
 import com.sky.mapper.DishMapper;
@@ -136,10 +138,35 @@ public class DishServiceImpl implements DishService {
         log.info("update dish success");
     }
 
+    /**
+     * 根据分类id查询
+     * @param categoryId
+     * @return
+     */
     @Override
     public List<Dish> queryBycategoryId(Long categoryId) {
         List<Dish> dish = dishMapper.queryBycategoryId(categoryId);
         return dish;
+    }
+
+    /**
+     * 起售停售
+     * @param dishDTO
+     */
+    @Override
+    public void saleOrnot(DishDTO dishDTO) {
+        List<Setmeal> setmeals = setmealdishMapper.saleOrnotQuery(dishDTO.getId());
+
+        if(setmeals != null && !setmeals.isEmpty() && dishDTO.getStatus().equals(StatusConstant.DISABLE)){
+            setmeals.forEach(setmeal -> {
+                if(setmeal.getStatus() == StatusConstant.ENABLE){
+                    throw new BaseException(MessageConstant.DISH_SET_SALE_BY_MEAL);
+                }
+            });
+        }
+        Dish dish = new Dish();
+        BeanUtils.copyProperties(dishDTO, dish);
+        dishMapper.update(dish);
     }
 
 
