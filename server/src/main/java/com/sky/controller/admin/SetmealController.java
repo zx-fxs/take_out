@@ -93,6 +93,20 @@ public class SetmealController {
         setmealService.update(setmealDTO);
         return Result.success();
     }
+
+    /**
+     * 删除套餐
+     * @param ids
+     * @return
+     */
+    @DeleteMapping
+    @ApiOperation(value = "删除套餐")
+    public Result delete(@RequestParam List<Long> ids){
+        log.info("delete setmeal:{}",ids);
+        setmealService.delete(ids);
+
+        return Result.success();
+    }
 }
 
 

@@ -21,6 +21,15 @@
         </set>
         where id = #{id}
     </update>
+    <delete id="delete">
+        delete s , sd from setmeal s join setmeal_dish sd on s.id = sd.setmeal_id
+        <where>
+            s.id in
+            <foreach collection="ids" item="id" separator="," open="(" close=")">
+                #{id}
+            </foreach>
+        </where>
+    </delete>
     <select id="pageQuery" resultType="com.sky.vo.SetmealVO">
         select s.* , c.name as categoryName from setmeal s left outer join category c on s.category_id = c.id
         <where>
