@@ -60,11 +60,13 @@ public class AutoFillAspect {
                 Method setUserMethod = arg.getClass().getDeclaredMethod(AutoFillConstant.SET_CREATE_USER, Long.class);
                 Method setUpdateTimeMethod = arg.getClass().getDeclaredMethod(AutoFillConstant.SET_UPDATE_TIME, LocalDateTime.class);
                 Method setUpdateUserMethod = arg.getClass().getDeclaredMethod(AutoFillConstant.SET_UPDATE_USER, Long.class);
+
                 setTimeMethod.invoke(arg,now);
                 setUserMethod.invoke(arg,currentId);
                 setUpdateTimeMethod.invoke(arg,now);
                 setUpdateUserMethod.invoke(arg,currentId);
             } catch (Exception e) {
+                log.error("出错");
                 throw new RuntimeException(e);
             }
         }else if(operationType == OperationType.UPDATE){
