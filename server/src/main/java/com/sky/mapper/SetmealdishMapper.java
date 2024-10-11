@@ -1,5 +1,6 @@
 package com.sky.mapper;
 
+import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -23,4 +24,6 @@ public interface SetmealdishMapper {
     List<SetmealDish> queryById(Long id);
 
     void insert(List<SetmealDish> setmealDishes);
+
+    List<Setmeal> saleOrnotQuery(Long id);
 }

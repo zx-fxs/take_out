@@ -43,4 +43,6 @@ public interface DishService {
     void update(DishDTO dishDTO);
 
     List<Dish> queryBycategoryId(Long categoryId);
+
+    void saleOrnot(DishDTO dishDTO);
 }

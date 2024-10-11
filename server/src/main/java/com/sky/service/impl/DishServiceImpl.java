@@ -8,6 +8,8 @@ import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
+import com.sky.entity.Setmeal;
+import com.sky.exception.BaseException;
 import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.DishFlavorsMapper;
 import com.sky.mapper.DishMapper;
@@ -140,6 +142,22 @@ public class DishServiceImpl implements DishService {
     public List<Dish> queryBycategoryId(Long categoryId) {
         List<Dish> dish = dishMapper.queryBycategoryId(categoryId);
         return dish;
+    }
+
+    @Override
+    public void saleOrnot(DishDTO dishDTO) {
+        List<Setmeal> setmeals = setmealdishMapper.saleOrnotQuery(dishDTO.getId());
+
+        if(setmeals != null && !setmeals.isEmpty() && dishDTO.getStatus().equals(StatusConstant.DISABLE)){
+            setmeals.forEach(setmeal -> {
+                if(setmeal.getStatus() == StatusConstant.ENABLE){
+                    throw new BaseException(MessageConstant.DISH_SET_SALE_BY_MEAL);
+                }
+            });
+        }
+        Dish dish = new Dish();
+        BeanUtils.copyProperties(dishDTO, dish);
+        dishMapper.update(dish);
     }
 
 
