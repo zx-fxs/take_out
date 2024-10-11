@@ -21,4 +21,6 @@ public interface SetmealdishMapper {
      * @return
      */
     List<SetmealDish> queryById(Long id);
+
+    void insert(List<SetmealDish> setmealDishes);
 }

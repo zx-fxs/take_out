@@ -9,9 +9,12 @@ import com.sky.service.SetmealService;
 import com.sky.vo.SetmealVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/setmeal")
@@ -68,12 +71,28 @@ public class SetmealController {
      */
     @GetMapping("/{id}")
     @ApiOperation(value = "根据id查询套餐")
-    private Result<SetmealVO> queryById(@PathVariable Long id){
+    public Result<SetmealVO> queryById(@PathVariable Long id){
         log.info("queryById setmeal:{}",id);
         SetmealVO setmealVO = setmealService.queryById(id);
         return Result.success(setmealVO);
     }
 
+    /**
+     * 起售停售
+     * @param status
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    @ApiOperation(value = "起售停售")
+    public Result saleOrnot(@PathVariable Integer status, Long id){
+        log.info("saleOrnot setmealId:{}",id);
+        SetmealDTO setmealDTO = new SetmealDTO();
+        setmealDTO.setId(id);
+        setmealDTO.setStatus(status);
+
+        setmealService.update(setmealDTO);
+        return Result.success();
+    }
 }
 
 
