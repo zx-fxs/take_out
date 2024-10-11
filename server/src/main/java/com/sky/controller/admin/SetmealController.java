@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,7 +23,7 @@ public class SetmealController {
 
     @PostMapping
     @ApiOperation(value = "新增套餐")
-    public Result insert(SetmealDTO setmealDTO){
+    public Result insert(@RequestBody SetmealDTO setmealDTO){
         log.info("insert setmeal:{}",setmealDTO);
         setmealService.insert(setmealDTO);
 
