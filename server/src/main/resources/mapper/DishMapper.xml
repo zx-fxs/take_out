@@ -49,10 +49,25 @@
             </foreach>
         </where>
     </select>
-    <select id="queryBycategoryId" resultType="com.sky.entity.Dish">
-        select * from dish where category_id = #{categoryId}
+    <select id="queryBycategoryId" resultType="com.sky.vo.DishVO">
+        select d.*,df.value from dish d left outer join dish_flavor df on d.id = df.dish_id where category_id = #{categoryId}
     </select>
     <select id="getBySetmealId" resultType="com.sky.entity.Dish">
         select d.* from dish d left outer join setmeal_dish sd on d.id = sd.dish_id where sd.setmeal_id = #{id}
+    </select>
+    <select id="list" resultType="com.sky.entity.Dish">
+        select * from dish
+        <where>
+            <if test="name != null">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+        order by create_time desc
     </select>
 </mapper>

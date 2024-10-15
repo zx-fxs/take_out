@@ -14,9 +14,12 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/admin/dish")
@@ -27,6 +30,9 @@ public class DishController {
     @Autowired
     private DishService dishService;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     /**
      * 新增菜品
      * @param dishdto
@@ -36,6 +42,7 @@ public class DishController {
     public Result insert(@RequestBody DishDTO dishdto) {
         log.info("insert dish:{}", dishdto);
         dishService.insert(dishdto);
+        cacheClean("dish_*");
         return Result.success();
     }
 
@@ -54,9 +61,9 @@ public class DishController {
 
     @GetMapping("/list")
     @ApiOperation(value = "根据分类id查询菜品")
-    public Result QueryBycategoryId(Long categoryId) {
+    public Result<List<DishVO>> QueryBycategoryId(Long categoryId) {
         log.info("list dish:{}", categoryId);
-        List<Dish> dishes = dishService.queryBycategoryId(categoryId);
+        List<DishVO> dishes = dishService.queryBycategoryId(categoryId);
         return Result.success(dishes);
     }
 
@@ -69,6 +76,7 @@ public class DishController {
     public Result delete(@RequestParam List<Long> ids){
         log.info("delete dish:{}", ids);
         dishService.delete(ids);
+        cacheClean("dish_*");
         return Result.success();
     }
 
@@ -94,6 +102,7 @@ public class DishController {
     public Result update(@RequestBody DishDTO dishDTO) {
         log.info("update dish:{}", dishDTO);
         dishService.update(dishDTO);
+        cacheClean("dish_*");
         return Result.success();
     }
 
@@ -112,7 +121,17 @@ public class DishController {
         dishDTO.setStatus(status);
 
         dishService.saleOrnot(dishDTO);
+        cacheClean("dish_*");
         return Result.success();
+    }
+
+    /**
+     * 清理缓存数据
+     * @param pattern
+     */
+    private void cacheClean(String pattern){
+        Set keys = redisTemplate.keys(pattern);
+        redisTemplate.delete(keys);
     }
 }
 
