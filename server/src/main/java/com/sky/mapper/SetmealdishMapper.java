@@ -37,6 +37,5 @@ public interface SetmealdishMapper {
      * @param id
      * @return
      */
-    @AutoFill(OperationType.UPDATE)
     List<Setmeal> saleOrnotQuery(Long id);
 }

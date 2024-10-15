@@ -61,7 +61,7 @@ public interface DishMapper {
      * @param categoryId
      * @return
      */
-    List<Dish> queryBycategoryId(Long categoryId);
+    List<DishVO> queryBycategoryId(Long categoryId);
 
     /**
      * 根据套餐id查询套餐内菜品
@@ -69,4 +69,11 @@ public interface DishMapper {
      * @return
      */
     List<Dish> getBySetmealId(Long id);
+
+    /**
+     * 动态条件查询菜品
+     * @param dish
+     * @return
+     */
+    List<Dish> list(Dish dish);
 }
