@@ -7,5 +7,11 @@ import java.util.List;
 
 @Mapper
 public interface UserOrderDetailMapper {
+    /**
+     * 批量插入订单详情
+     * @param orderDetailList
+     */
     void insertBatch(List<OrderDetail> orderDetailList);
+
+    List<OrderDetail> getByOrderId(Long orderId);
 }

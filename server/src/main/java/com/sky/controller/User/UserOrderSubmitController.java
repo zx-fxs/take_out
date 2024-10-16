@@ -1,6 +1,8 @@
 package com.sky.controller.User;
 
+import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersSubmitDTO;
+import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.UserOrderSubmitService;
 import com.sky.vo.OrderSubmitVO;
@@ -8,10 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
@@ -32,5 +31,18 @@ public class UserOrderSubmitController {
         log.info("user order :{}", ordersSubmitDTO);
         OrderSubmitVO orderSubmitVO = userOrderSubmitService.orderSubmit(ordersSubmitDTO);
         return Result.success(orderSubmitVO);
+    }
+
+    /**
+     * 查询历史订单
+     * @param ordersPageQueryDTO
+     * @return
+     */
+    @GetMapping("/historyOrders")
+    @ApiOperation(value = "查询历史订单")
+    public Result<PageResult> pageQuery(OrdersPageQueryDTO ordersPageQueryDTO) {
+        log.info("history query :{}", ordersPageQueryDTO);
+        PageResult pageResult = userOrderSubmitService.pageQuery(ordersPageQueryDTO);
+        return Result.success(pageResult);
     }
 }
