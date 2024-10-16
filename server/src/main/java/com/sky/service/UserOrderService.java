@@ -4,8 +4,10 @@ import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.result.PageResult;
 import com.sky.vo.OrderSubmitVO;
+import com.sky.vo.OrderVO;
+import org.apache.ibatis.annotations.Delete;
 
-public interface UserOrderSubmitService {
+public interface UserOrderService {
     /**
      * 用户下单
      * @param ordersSubmitDTO
@@ -19,4 +21,18 @@ public interface UserOrderSubmitService {
      * @return
      */
     PageResult pageQuery(OrdersPageQueryDTO ordersPageQueryDTO);
+
+    /**
+     * 查询订单详情
+     * @param orderid
+     * @return
+     */
+    OrderVO detailsQuery(Long orderid);
+
+    /**
+     * 取消订单
+     * @param id
+     * @return
+     */
+    void delete(Long id);
 }

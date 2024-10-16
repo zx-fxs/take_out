@@ -1,10 +1,8 @@
 package com.sky.service.impl;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
-import com.sky.context.BaseContext;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.entity.AddressBook;
@@ -18,15 +16,14 @@ import com.sky.mapper.ShoppingCartMapper;
 import com.sky.mapper.UserOrderDetailMapper;
 import com.sky.mapper.UserOrderMapper;
 import com.sky.result.PageResult;
-import com.sky.result.Result;
-import com.sky.service.UserOrderSubmitService;
+import com.sky.service.UserOrderService;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.bridge.Message;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -34,7 +31,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class UserOrderSubmitServiceImpl implements UserOrderSubmitService {
+public class UserOrderServiceImpl implements UserOrderService {
 
     @Autowired
     private UserOrderMapper userOrderMapper;
@@ -50,6 +47,7 @@ public class UserOrderSubmitServiceImpl implements UserOrderSubmitService {
      * @return
      */
     @Override
+    @Transactional
     public OrderSubmitVO orderSubmit(OrdersSubmitDTO ordersSubmitDTO) {
         AddressBook addressBook = addressBookMapper.getById(ordersSubmitDTO.getAddressBookId());
         if(addressBook == null){
@@ -123,5 +121,35 @@ public class UserOrderSubmitServiceImpl implements UserOrderSubmitService {
             }
         }
         return new PageResult(page.getTotal(), list);
+    }
+
+    /**
+     * 查询订单详情
+     * @param orderid
+     * @return
+     */
+    @Override
+    public OrderVO detailsQuery(Long orderid) {
+        Orders orders = userOrderMapper.getById(orderid);
+
+        List<OrderDetail> byOrderId = userOrderDetailMapper.getByOrderId(orderid);
+
+        OrderVO orderVO = new OrderVO();
+        BeanUtils.copyProperties(orders, orderVO);
+        orderVO.setOrderDetailList(byOrderId);
+
+        return orderVO;
+    }
+
+    /**
+     * 取消订单
+     * @param id
+     * @return
+     */
+    @Override
+    @Transactional
+    public void delete(Long id) {
+        userOrderMapper.delete(id);
+        userOrderDetailMapper.delete(id);
     }
 }
